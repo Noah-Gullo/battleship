@@ -1,0 +1,17 @@
+Here are the various npm installations. Run then delete after use.
+
+npm install --save-dev webpack webpack-cli
+npm install --save-dev html-webpack-plugin
+npm install --save-dev style-loader css-loader
+npm install --save-dev webpack-dev-server
+
+npm run build
+npm run dev
+
+npm init @eslint/config@latest
+
+mkdir __tests__
+cd __tests__
+touch tests.js
+
+REMEMBER TO CHANGE THE TITLE
