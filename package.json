@@ -24,19 +24,20 @@
   "homepage": "https://github.com/Noah-Gullo/webpack-template#readme",
   "devDependencies": {
     "@babel/preset-env": "^7.29.5",
+    "@eslint/js": "^10.0.1",
     "css-loader": "^7.1.4",
-    "eslint": "^10.2.1",
-    "globals": "^17.5.0",
+    "eslint": "^10.4.0",
+    "globals": "^17.6.0",
     "html-loader": "^5.1.0",
-    "html-webpack-plugin": "^5.6.6",
+    "html-webpack-plugin": "^5.6.7",
     "husky": "^9.1.7",
     "jest": "^30.4.2",
     "lint-staged": "^16.4.0",
     "prettier": "3.8.3",
     "style-loader": "^4.0.0",
-    "webpack": "^5.105.4",
+    "webpack": "^5.107.1",
     "webpack-cli": "^7.0.2",
-    "webpack-dev-server": "^5.2.3"
+    "webpack-dev-server": "^5.2.4"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
