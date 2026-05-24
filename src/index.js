@@ -5,6 +5,8 @@ export class Ship{
     #hitCount;
     #sunk;
     constructor(length){
+        if(!new.target) throw new Error("Cannot call Ship constructor without 'new'");
+        if(length < 1) throw new Error("Length must be greater than 0");
         this.#length = length;
         this.#hitCount = 0;
         this.#sunk = false; 
@@ -28,9 +30,5 @@ export class Ship{
 
     get hitCount(){
         return this.#hitCount;
-    }
-
-    get sunk(){
-        return this.#sunk
     }
 }
