@@ -14,6 +14,19 @@ export class Point{
         }
         return true;
     }
+    
+    equals(point){
+        if(this.#x === point.x && this.#y === point.y) return true;
+        return false;
+    }
+
+    get x(){
+        return this.#x;
+    }
+
+    get y(){
+        return this.#y;
+    }
 }
 
 export class Ship{
@@ -56,3 +69,62 @@ export class Ship{
         return this.#hitCount;
     }
 }
+
+export class GameBoard{
+    #board
+    #missed
+    #ships
+    constructor(ships){
+        this.#board = [[],[],[],[],[],[],[],[],[],[]];
+        this.createBoard();
+        this.#missed = [];
+        this.#ships = ships;
+        this.placeShips();
+    }
+
+    createBoard(){
+        for(let i = 0; i < 10; i++){
+            for(let j = 0; j < 10; j++){
+                this.#board[i].push(new Point(i, j));
+            }
+        }
+    }
+
+    placeShips(){
+        for(let i = 0; i < this.#ships.length;i++){
+            let ship = this.#ships[i];
+            this.#board[ship.location.x][ship.location.y] = ship;
+        }   
+    }
+
+    receiveAttack(point){
+        if(!(point instanceof Point)) throw new Error("receiveAttack must receive a point as an argument.");
+        for(let i = 0; i < this.#ships.length; i++){
+            if(this.#ships[i].location(point)){
+                this.#ships.hit();
+                this.allShipsSunk();
+                return;
+            }
+        }
+    
+        this.#missed.push(point);    
+    }
+
+    allShipsSunk(){
+        for(let i = 0; i < this.#ships.length; i++){
+            if(!this.#ships[i].isSunk){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    get ships(){
+        return this.#ships;
+    }
+}
+const ships = [];
+ships[0] = new Ship(5, new Point(0,0));
+const board = new GameBoard(ships);
+console.log(board);

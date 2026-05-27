@@ -1,4 +1,4 @@
-import { Point, Ship } from "../src/index.js";
+import { Point, Ship, GameBoard } from "../src/index.js";
 
 test("Ship creation", () => {
     expect(new Ship(5, new Point(0,0))).toMatchObject({length: 5, hitCount: 0, location: new Point(0,0)});
@@ -53,4 +53,28 @@ test("Invalid points on the grid", () => {
     expect(new Point(5,-10).onGrid()).toBe(false);
     expect(new Point(-1,-5).onGrid()).toBe(false);
     expect(new Point(10,10).onGrid()).toBe(false);
+})
+
+test("Point equality", () => {
+    const p1 = new Point(0, 1);
+    expect(p1.equals(new Point(0,1))).toBe(true);
+    expect(p1.equals(new Point(1,0))).toBe(false);
+
+    const p2 = new Point(-1, 100);
+    expect(p2.equals(new Point(-1,100))).toBe(true);
+
+    const p3 = new Point(5, 3);
+    expect(p3.equals(new Point(5,3))).toBe(true);
+})
+
+test("Gameboard creation", () => {
+    const ships = [];
+    ships[0] = new Ship(5, new Point(0, 3));
+    ships[1] = new Ship(2, new Point(0,0));
+    expect(new GameBoard(ships)).toMatchObject({ships: ships});
+})
+
+test("Gameboard can place ships on valid points", () => {
+    const board = new GameBoard();
+    
 })
