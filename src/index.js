@@ -127,12 +127,9 @@ export class GameBoard{
 
     receiveAttack(point){
         if(!(point instanceof Point)) throw new Error("receiveAttack must receive a point as an argument.");
-        for(let i = 0; i < this.#ships.length; i++){
-            if(this.#ships[i].location(point)){
-                this.#ships.hit();
-                this.allShipsSunk();
-                return;
-            }
+        if(this.getPoint(point) instanceof Ship){
+            this.allShipsSunk();
+            return;
         }
         
         this.#board[point.y][point.x] = "Miss";
@@ -149,22 +146,10 @@ export class GameBoard{
         return true;
     }
 
-    getCol(colNum){
-        let arr = [];
-        if(colNum < 0 || colNum > 9) throw new Error("Invalid column number");
-        for(let i = 0; i < this.#board[0].length; i++){
-            arr.push(this.#board[i][colNum]);
-        }
-        return arr;
-    }
-
-    getRow(rowNum){
-        let arr = [];
-        if(rowNum < 0 || rowNum > 9) throw new Error("Invalid row number");
-        for(let i = 0; i < this.#board[0].length; i++){
-            arr.push(this.#board[rowNum][i]);
-        }
-        return arr;
+    getPoint(point){
+        if(!(point instanceof Point)) throw new Error("getPoint expects a 'Point' argument");
+        if(point.x < 0 || point.x > 9  || point.y < 0 || point.y > 9) throw new Errror("Point passed is not in grid");
+        return this.#board[point.y][point.x];
     }
 
     get ships(){

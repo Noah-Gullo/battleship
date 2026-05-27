@@ -74,26 +74,26 @@ test("Gameboard creation", () => {
     expect(new GameBoard(ships)).toMatchObject({ships: ships});
 })
 
-test("Invalid getCol/getRow", () => {
+test("Invalid get Point", () => {
     const board = new GameBoard([]);
-    expect(() => {board.getCol(-1)}).toThrow();
-    expect(() => {board.getCol(10)}).toThrow();
-    expect(() => {board.getRow(-1)}).toThrow();
-    expect(() => {board.getRow(10)}).toThrow();
+    expect(() => {board.getPoint(new Point(-1, 5))}).toThrow();
+    expect(() => {board.getPoint(new Point(15, 5))}).toThrow();
+    expect(() => {board.getPoint(new Point(5, -1))}).toThrow();
+    expect(() => {board.getPoint(new Point(5, 15))}).toThrow();
 })
 
-test("Valid getCol/getRow", () => {
+test("Valid getPoint", () => {
     const ships = [];
     ships[0] = new Ship(true, 2, new Point(2, 8));
     ships[1] = new Ship(false, 3, new Point(7, 9));
     const board = new GameBoard(ships);
-    const col = [new Point(0, 8), new Point(1, 8), new Point(2, 8), new Point(3, 8), new Point(4, 8), new Point(5, 8),
-                 new Point(6, 8), new Point(7, 8), ships[0], ships[0]];
-    const row = [new Point(9, 0), new Point(9, 1), ships[0], new Point(9, 3), new Point(9, 4), 
-                 new Point(9, 5), new Point(9, 6), ships[1], ships[1], ships[1]];
+    board.receiveAttack(new Point(4, 3));
     
-    expect(board.getCol(2)).toStrictEqual(col);
-    expect(board.getRow(9)).toStrictEqual(row);
+    expect(board.getPoint(new Point(0, 0))).toEqual(new Point(0,0));
+    expect(board.getPoint(new Point(2, 8))).toEqual(ships[0]);
+    expect(board.getPoint(new Point(3, 8))).toEqual(ships[0]);
+    expect(board.getPoint(new Point(7, 9))).toEqual(ships[1]);
+    expect(board.getPoint(new Point(4, 3))).toEqual("Miss");
 })
 
 test("Gameboard can place ships on valid points", () => {
@@ -101,16 +101,16 @@ test("Gameboard can place ships on valid points", () => {
     ships[0] = new Ship(true, 3, new Point(0,0));
     ships[1] = new Ship(false, 5, new Point(5,5));
     ships[2] = new Ship(false, 3, new Point(7,9));
-    const col0 = [ships[0], ships[0], ships[0], new Point(0,3), new Point(0, 4), new Point(0,5), new Point(0,6), 
-                  new Point(0,7), new Point(0,8), new Point(0, 9)];
-    const row5 = [new Point(5,0), new Point(5, 1), new Point(5, 2), new Point(5, 3), new Point(5, 4), ships[1], ships[1], 
-                  ships[1], ships[1], ships[1]];
-    const row9 = [new Point(9,0), new Point(9,1), new Point(9,2), new Point(9,3), new Point(9,4), new Point(9,5), new Point(9,6),
-                  ships[2], ships[2], ships[2]];
     const board = new GameBoard(ships);
-    expect(board.getCol(0)).toStrictEqual(col0);
-    expect(board.getRow(5)).toStrictEqual(row5);
-    expect(board.getRow(9)).toStrictEqual(row9);
+    expect(board.getPoint(new Point(0,0))).toEqual(ships[0]);
+    expect(board.getPoint(new Point(0,1))).toEqual(ships[0]);
+    expect(board.getPoint(new Point(0,2))).toEqual(ships[0]);
+    expect(board.getPoint(new Point(5,5))).toEqual(ships[1]);
+    expect(board.getPoint(new Point(6,5))).toEqual(ships[1]);
+    expect(board.getPoint(new Point(7,5))).toEqual(ships[1]);
+    expect(board.getPoint(new Point(7,9))).toEqual(ships[2]);
+    expect(board.getPoint(new Point(8,9))).toEqual(ships[2]);
+    expect(board.getPoint(new Point(9,9))).toEqual(ships[2]);
 })
 
 test("receiveAttack adds to missed correctly", () => {
@@ -119,13 +119,25 @@ test("receiveAttack adds to missed correctly", () => {
     board.receiveAttack(new Point(0, 7));
     board.receiveAttack(new Point(9, 9));
 
-    const col0 = [new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3), new Point(0, 4), "Miss", 
-                  new Point(0, 6), "Miss", new Point(0, 8), new Point(0, 9)];
-
-    const row9 = [new Point(0, 9), new Point(1, 9), new Point(2, 9), new Point(3, 9), new Point(4, 9), new Point(5, 9),
-                  new Point(6, 9), new Point(7, 9), new Point(0, 9), "Miss"];
-
     expect(board.missed).toStrictEqual([new Point(0, 5), new Point(6, 7), new Point(9, 9)]);
-    expect(board.getCol(0)).toStrictEqual(col0);
-    expect(board.getRow(9)).toStrictEqual(row9);
+    expect(board.getPoint(new Point(0, 5))).toBe("Miss");
+    expect(board.getPoint(new Point(0, 7))).toBe("Miss");
+    expect(board.getPoint(new Point(9, 9))).toBe("Miss");
+})
+
+test("All ships sunk", () => {
+    const ships = [];
+    ships[0] = new Ship(true, 2, new Point(2,3));
+    ships[1] = new Ship(false, 1, new Point(9,9));
+    ships[2] = new Ship(true, 3, new Point(5,5));
+    const board = new GameBoard(ships);
+    expect(board.allShipsSunk()).toBe(false);
+    board.receiveAttack(new Point(2, 3));
+    board.receiveAttack(new Point(2, 4));
+    board.receiveAttack(new Point(9, 9));
+    expect(board.allShipsSunk()).toBe(false);
+    board.receiveAttack(new Point(5, 5));
+    board.receiveAttack(new Point(5, 6));
+    board.receiveAttack(new Point(5, 7));
+    expect(board.allShipsSunk()).toBe(true);
 })
