@@ -112,3 +112,20 @@ test("Gameboard can place ships on valid points", () => {
     expect(board.getRow(5)).toStrictEqual(row5);
     expect(board.getRow(9)).toStrictEqual(row9);
 })
+
+test("receiveAttack adds to missed correctly", () => {
+    const board = new GameBoard([]);
+    board.receiveAttack(new Point(0, 5));
+    board.receiveAttack(new Point(0, 7));
+    board.receiveAttack(new Point(9, 9));
+
+    const col0 = [new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3), new Point(0, 4), "Miss", 
+                  new Point(0, 6), "Miss", new Point(0, 8), new Point(0, 9)];
+
+    const row9 = [new Point(0, 9), new Point(1, 9), new Point(2, 9), new Point(3, 9), new Point(4, 9), new Point(5, 9),
+                  new Point(6, 9), new Point(7, 9), new Point(0, 9), "Miss"];
+
+    expect(board.missed).toStrictEqual([new Point(0, 5), new Point(6, 7), new Point(9, 9)]);
+    expect(board.getCol(0)).toStrictEqual(col0);
+    expect(board.getRow(9)).toStrictEqual(row9);
+})

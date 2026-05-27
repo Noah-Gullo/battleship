@@ -134,7 +134,8 @@ export class GameBoard{
                 return;
             }
         }
-    
+        
+        this.#board[point.y][point.x] = "Miss";
         this.#missed.push(point);    
     }
 
@@ -172,5 +173,9 @@ export class GameBoard{
 
     get board(){
         return this.#board;
+    }
+
+    get missed(){
+        return this.#missed;
     }
 }
