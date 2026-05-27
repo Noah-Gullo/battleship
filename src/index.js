@@ -128,6 +128,8 @@ export class GameBoard{
     receiveAttack(point){
         if(!(point instanceof Point)) throw new Error("receiveAttack must receive a point as an argument.");
         if(this.getPoint(point) instanceof Ship){
+            const ship = this.getPoint(point)
+            ship.hit();
             this.allShipsSunk();
             return;
         }
@@ -138,7 +140,7 @@ export class GameBoard{
 
     allShipsSunk(){
         for(let i = 0; i < this.#ships.length; i++){
-            if(!this.#ships[i].isSunk){
+            if(!this.#ships[i].isSunk()){
                 return false;
             }
         }

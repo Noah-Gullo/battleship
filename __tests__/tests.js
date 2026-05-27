@@ -134,6 +134,7 @@ test("All ships sunk", () => {
     expect(board.allShipsSunk()).toBe(false);
     board.receiveAttack(new Point(2, 3));
     board.receiveAttack(new Point(2, 4));
+    expect(board.allShipsSunk()).toBe(false);
     board.receiveAttack(new Point(9, 9));
     expect(board.allShipsSunk()).toBe(false);
     board.receiveAttack(new Point(5, 5));
