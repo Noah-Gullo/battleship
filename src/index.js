@@ -30,19 +30,22 @@ export class Point{
 }
 
 export class Ship{
+    #direction
     #length;
     #location;
     #hitCount;
     #sunk;
-    constructor(length, location){
-        if(!new.target) throw new Error("Cannot call Ship constructor without 'new'");
-        if(length < 1) throw new Error("Length must be greater than 0");
+    constructor(direction, length, location){
+        if(direction != "right" && direction != "down") throw new Error("Ship direction must be either 'down' or 'right'.");
+        if(!new.target) throw new Error("Cannot call Ship constructor without 'new'.");
+        if(length < 1) throw new Error("Length must be greater than 0.");
         if(!(location instanceof Point)) throw new Error("Location must be a Point instance.");
-        if(!location.onGrid()) throw new Error("Ship must be located on 10x10 grid starting at (0,0)."); 
         this.#length = length;
         this.#location = location;
         this.#hitCount = 0;
         this.#sunk = false; 
+        this.#direction = direction;
+        this.#checkValidPlacement();
     }
     
     hit(){
@@ -55,6 +58,22 @@ export class Ship{
             return true;
         }
         return false;
+    }
+
+    #checkValidPlacement(){
+        let end;
+
+        if(this.#direction === "right"){
+            end = new Point(this.#location.x + this.#length - 1, this.#location.y);
+        }else if(this.#direction === "down"){
+            end = new Point(this.#location.x, this.#location.y + this.#length - 1);
+        }
+
+        if(!this.#location.onGrid() || !end.onGrid()) throw new Error("Ship must be located on 10x10 grid starting at (0,0)."); 
+    }
+
+    get direction(){
+        return this.#direction;
     }
 
     get length(){
@@ -93,7 +112,15 @@ export class GameBoard{
     placeShips(){
         for(let i = 0; i < this.#ships.length;i++){
             let ship = this.#ships[i];
-            this.#board[ship.location.x][ship.location.y] = ship;
+            if(ship.direction == "right"){
+                for(let j = ship.location.x; j < ship.location.x + ship.length; j++){
+                    this.#board[ship.location.y][j] = ship;  
+                }
+            }else if(ship.direction == "down"){
+                for(let j = ship.location.y; j < ship.location.y + ship.length; j++){
+                    this.#board[j][ship.location.x] = ship;  
+                }
+            }
         }   
     }
 
@@ -120,11 +147,29 @@ export class GameBoard{
         return true;
     }
 
+    getCol(colNum){
+        let arr = [];
+        if(colNum < 0 || colNum > 9) throw new Error("Invalid column number");
+        for(let i = 0; i < this.#board[0].length; i++){
+            arr.push(this.#board[i][colNum]);
+        }
+        return arr;
+    }
+
+    getRow(rowNUm){
+        let arr = [];
+        if(rowNUm < 0 || row1 > 9) throw new Error("Invalid row number");
+        for(let i = 0; i < this.#board[0].length; i++){
+            arr.push(this.#board[rowNUm][i]);
+        }
+        return arr;
+    }
+
     get ships(){
         return this.#ships;
     }
+
+    get board(){
+        return this.#board;
+    }
 }
-const ships = [];
-ships[0] = new Ship(5, new Point(0,0));
-const board = new GameBoard(ships);
-console.log(board);
