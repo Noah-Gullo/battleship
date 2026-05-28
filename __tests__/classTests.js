@@ -153,5 +153,5 @@ test("Valid Player creation", () => {
     ships[1] = new Ship(false, 1, new Point(9,9));
     ships[2] = new Ship(true, 3, new Point(5,5));
     const board = new GameBoard(ships);
-    expect(new Player(board)).toMatchObject({gameBoard: board});
+    expect(new Player(false, board)).toMatchObject({gameBoard: board});
 })

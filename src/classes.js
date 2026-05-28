@@ -167,10 +167,17 @@ export class GameBoard{
 }
 
 export class Player{
+    #isComputer;
     #gameBoard;
-    constructor(gameBoard){
+    constructor(isComputer, gameBoard){
+        if(isComputer != false && isComputer != true) throw new Error("Player must take in a bool for first argument")
         if (!(gameBoard instanceof GameBoard)) throw new Error("Board argument must be a 'GameBoard'");
+        this.#isComputer = isComputer;
         this.#gameBoard = gameBoard;
+    }
+
+    get isComputer(){
+        return this.#isComputer;
     }
 
     get gameBoard(){

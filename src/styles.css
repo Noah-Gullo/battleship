@@ -14,6 +14,9 @@
 :root{
   --background-color: rgb(171, 171, 255);
   --title-color: rgb(0, 0, 122);
+  --point-color: rgb(52, 133, 255);
+  --ship-color: rgb(196, 196, 196);
+  --hit-color: rgb(255, 0, 0);
 }
 
 h1{
@@ -30,7 +33,8 @@ h1{
   gap: 10rem;
 }
 
-.grid{
+#playerGrid,
+#computerGrid{
   display: grid;
   width: 25rem;
   height: 25rem;
@@ -41,6 +45,14 @@ h1{
   outline: 0.4rem solid black;
 }
 
+.point{
+  background-color: var(--point-color);
+}
+
 .ship{
-  background-color: darkgray;
+  background-color: var(--ship-color);
+}
+
+.hit{
+  background-color: var(--hit-color);
 }

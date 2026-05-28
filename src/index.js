@@ -1,42 +1,79 @@
 import { Point, Ship, GameBoard, Player } from "./classes.js";
 import "./styles.css";
 
-function renderGrid(board){
-    const gridContainer = document.getElementById("gridContainer");
-    const grid = document.createElement("div");
-    grid.setAttribute("class", "grid");
+function renderGrid(player){
+    const board = player.gameBoard.board;
+    let grid;
+    if(player.isComputer){
+        grid = document.getElementById("computerGrid");
+    }else{
+        grid = document.getElementById("playerGrid");
+    }
+
+    while(grid.hasChildNodes()){
+        grid.removeChild(grid.lastChild);
+    }
 
     for(let i = 0; i < board[0].length; i++){
         for(let j = 0; j < board[0].length; j++){
-            const place = document.createElement("div");
+            const point = document.createElement("div");
             if(board[i][j] instanceof Point){
-                place.setAttribute("class", "point");
+                point.setAttribute("class", "point");
+                point.setAttribute("click", () => {
+                    point.setAttribute("Miss");
+                })
             }else if(board[i][j] instanceof Ship){
-                place.setAttribute("class", "ship");
+                point.setAttribute("class", "ship");
+                point.addEventListener("click", () => {
+                    recieveAttack(new Point(i,j), board);
+                    board[i][j] = "Hit";
+                    renderGrid(player);
+                })
+            }else if(board[i][j] == "Hit"){
+                point.setAttribute("class", "hit");
             }else if(board[i][j] === "Miss"){
-                place.setAttribute("class", "miss");
-            }   
-            grid.appendChild(place);
+                point.setAttribute("class", "miss");
+            }  
+            grid.appendChild(point);
         }
     }
     gridContainer.append(grid);
 }
 
+function recieveAttack(point, board){
+    const place = board[point.x][point.y];
+    if(place instanceof Ship){
+        console.log(place.hitCount);
+        place.hit();
+        console.log(place.hitCount);
+    }
+}
+
 const playerShips = [];
 playerShips[0] = new Ship(false, 3, new Point(3, 7));
-playerShips[1] = new Ship(true, 2, new Point(6, 5));
-playerShips[2] = new Ship(false, 3, new Point(0, 0));
-const player = new Player(new GameBoard(playerShips));
+playerShips[1] = new Ship(true, 2, new Point(8, 5));
+playerShips[2] = new Ship(false, 3, new Point(2, 2));
+const player = new Player(false, new GameBoard(playerShips));
 
 const computerShips = [];
 computerShips[0] = new Ship(true, 4, new Point(3, 2));
 computerShips[1] = new Ship(false, 2, new Point(5, 1));
-computerShips[2] = new Ship(false, 1, new Point(9,9));
-const computer = new Player(new GameBoard(computerShips));
+computerShips[2] = new Ship(false, 3, new Point(6,7));
+const computer = new Player(true, new GameBoard(computerShips));
 
 const content = document.getElementById("content");
 const gridContainer = document.createElement("div");
 gridContainer.setAttribute("id", "gridContainer");
 content.appendChild(gridContainer);
-renderGrid(player.gameBoard.board);
-renderGrid(computer.gameBoard.board);
+
+const computerGrid = document.createElement("div");
+computerGrid.setAttribute("id", "computerGrid");
+const playerGrid = document.createElement("div");
+playerGrid.setAttribute("id", "playerGrid");
+playerGrid.setAttribute("class", "gridContainer");
+computerGrid.setAttribute("class", "gridContainer");
+content.appendChild(playerGrid);
+content.appendChild(computerGrid);
+
+renderGrid(player);
+renderGrid(computer);
