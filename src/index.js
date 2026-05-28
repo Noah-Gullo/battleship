@@ -2,7 +2,8 @@ import { Point, Ship, GameBoard, Player } from "./classes.js";
 import "./styles.css";
 
 function renderGrid(player){
-    const board = player.gameBoard.board;
+    const gameBoard = player.gameBoard;
+    const board = gameBoard.board;
     let grid;
     if(player.isComputer){
         grid = document.getElementById("computerGrid");
@@ -17,38 +18,32 @@ function renderGrid(player){
     for(let i = 0; i < board[0].length; i++){
         for(let j = 0; j < board[0].length; j++){
             const point = document.createElement("div");
+
             if(board[i][j] instanceof Point){
                 point.setAttribute("class", "point");
-                point.addEventListener("click", () => {
-                    board[i][j] = "Miss";
-                    renderGrid(player);
-                })
             }else if(board[i][j] instanceof Ship){
                 point.setAttribute("class", "ship");
-                point.addEventListener("click", () => {
-                    recieveAttack(new Point(i,j), player.gameBoard);
-                    board[i][j] = "Hit";
-                    renderGrid(player);
-                })
             }else if(board[i][j] == "Hit"){
                 point.setAttribute("class", "hit");
             }else if(board[i][j] === "Miss"){
                 point.setAttribute("class", "miss");
                 point.textContent = "o";
             }  
+
+            point.addEventListener("click", () => {
+                receiveAttack(player, new Point(j, i));
+            })
+
             grid.appendChild(point);
         }
     }
 }
 
-function recieveAttack(point, gameBoard){
+function receiveAttack(player, point){
+    const gameBoard = player.gameBoard;
     const board = gameBoard.board;
-    const place = board[point.x][point.y];
-    if(place instanceof Ship){
-        console.log(place.hitCount);
-        place.hit();
-        console.log(place.hitCount);
-    }
+    gameBoard.receiveAttack(point);
+    renderGrid(player);
 }
 
 const playerShips = [];

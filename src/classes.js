@@ -126,15 +126,17 @@ export class GameBoard{
     receiveAttack(point){
         if(!(point instanceof Point)) throw new Error("receiveAttack must receive a point as an argument.");
         if(point.x < 0 || point.x > 9  || point.y < 0 || point.y > 9) throw new Errror("Point passed is not in grid");
-        if(this.getPoint(point) instanceof Ship){
+        const place = this.getPoint(point);
+        if(place instanceof Ship){
             const ship = this.getPoint(point)
             ship.hit();
+            this.#board[point.y][point.x] = "Hit"; 
             this.allShipsSunk();
             return;
-        }
-        
-        this.#board[point.y][point.x] = "Miss";
-        this.#missed.push(point);    
+        }else if(place instanceof Point){
+            this.#board[point.y][point.x] = "Miss";
+            this.#missed.push(point);   
+        } 
     }
 
     allShipsSunk(){
