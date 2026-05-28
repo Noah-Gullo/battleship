@@ -167,3 +167,21 @@ export class GameBoard{
         return this.#missed;
     }
 }
+
+export class Player{
+    #isComputer;
+    #board;
+    constructor(isComputer, board){
+        if (!(board instanceof GameBoard)) throw new Error("Board argument must be a 'GameBoard'");
+        this.#isComputer = isComputer;
+        this.#board = board;
+    }
+
+    get isComputer(){
+        return this.#isComputer;
+    }
+
+    get board(){
+        return this.#board;
+    }
+}

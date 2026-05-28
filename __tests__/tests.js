@@ -1,4 +1,4 @@
-import { Point, Ship, GameBoard } from "../src/index.js";
+import { Point, Ship, GameBoard, Player } from "../src/index.js";
 
 test("Ship creation", () => {
     expect(new Ship(false, 5, new Point(0,0))).toMatchObject({length: 5, hitCount: 0, location: new Point(0,0)});
@@ -141,4 +141,18 @@ test("All ships sunk", () => {
     board.receiveAttack(new Point(5, 6));
     board.receiveAttack(new Point(5, 7));
     expect(board.allShipsSunk()).toBe(true);
+})
+
+test("Invalid Player creation", () => {
+    expect(() => {new Player(true, null)}).toThrow();
+})
+
+test("Valid Player creation", () => {
+    const ships = [];
+    ships[0] = new Ship(true, 2, new Point(2,3));
+    ships[1] = new Ship(false, 1, new Point(9,9));
+    ships[2] = new Ship(true, 3, new Point(5,5));
+    const board = new GameBoard(ships);
+    expect(new Player(true, board)).toMatchObject({isComputer: true, board: board});
+    expect(new Player(false, board)).toMatchObject({isComputer: false, board: board});
 })
