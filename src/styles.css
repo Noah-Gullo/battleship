@@ -1,6 +1,24 @@
-* {
+@font-face {
+  font-family: roboto;
+  src: url(./fonts/Roboto-Bold.ttf);
+}
+
+*{
   box-sizing: border-box;
   margin: 0px;
   padding: 0px;
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background-color);
+  font-family: roboto, Helvetica, sans-serif;
+}
+
+
+:root{
+  --background-color: rgb(171, 171, 255);
+}
+
+h1{
+  font-size: 4em;
+  margin: 0.25em;
+  display: flex;
+  justify-content: center;
 }
