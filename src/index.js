@@ -2,7 +2,8 @@ import { Point, Ship, GameBoard, Player } from "./classes.js";
 import "./styles.css";
 
 function renderGrid(player){
-    const board = player.gameBoard.board;
+    const gameBoard = player.gameBoard;
+    const board = gameBoard.board;
     let grid;
     if(player.isComputer){
         grid = document.getElementById("computerGrid");
@@ -19,14 +20,10 @@ function renderGrid(player){
             const point = document.createElement("div");
             if(board[i][j] instanceof Point){
                 point.setAttribute("class", "point");
-                point.addEventListener("click", () => {
-                    board[i][j] = "Miss";
-                    renderGrid(player);
-                })
             }else if(board[i][j] instanceof Ship){
                 point.setAttribute("class", "ship");
-                point.addEventListener("click", () => {
-                    recieveAttack(new Point(i,j), player.gameBoard);
+                point.addEventListener("click", () =>{
+                    gameBoard.receiveAttack(new Point(j, i));
                     board[i][j] = "Hit";
                     renderGrid(player);
                 })
@@ -36,18 +33,14 @@ function renderGrid(player){
                 point.setAttribute("class", "miss");
                 point.textContent = "o";
             }  
+
+            point.addEventListener("click", () => {
+                gameBoard.receiveAttack(new Point(j, i));
+                renderGrid(player);
+            })
+
             grid.appendChild(point);
         }
-    }
-}
-
-function recieveAttack(point, gameBoard){
-    const board = gameBoard.board;
-    const place = board[point.x][point.y];
-    if(place instanceof Ship){
-        console.log(place.hitCount);
-        place.hit();
-        console.log(place.hitCount);
     }
 }
 

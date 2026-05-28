@@ -131,10 +131,10 @@ export class GameBoard{
             ship.hit();
             this.allShipsSunk();
             return;
-        }
-        
-        this.#board[point.y][point.x] = "Miss";
-        this.#missed.push(point);    
+        }else if(this.getPoint(point) instanceof Point){
+            this.#board[point.y][point.x] = "Miss";
+            this.#missed.push(point);   
+        } 
     }
 
     allShipsSunk(){
