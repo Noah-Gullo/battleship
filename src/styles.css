@@ -15,7 +15,8 @@
   --background-color: rgb(171, 171, 255);
   --title-color: rgb(0, 0, 122);
   --point-color: rgb(52, 133, 255);
-  --ship-color: rgb(196, 196, 196);
+  --miss-color: rgb(0, 43, 107);
+  --ship-color: rgb(94, 94, 94);
   --hit-color: rgb(255, 0, 0);
 }
 
@@ -55,4 +56,12 @@ h1{
 
 .hit{
   background-color: var(--hit-color);
+}
+
+.miss{
+  background-color: var(--miss-color);
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
