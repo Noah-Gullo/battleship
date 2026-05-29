@@ -1,15 +1,10 @@
 import { Point, Ship, GameBoard, Player } from "./classes.js";
 import "./styles.css";
 
-function renderGrid(player){
+function renderPlayerGrid(player){
     const gameBoard = player.gameBoard;
     const board = gameBoard.board;
-    let grid;
-    if(player.isComputer){
-        grid = document.getElementById("computerGrid");
-    }else{
-        grid = document.getElementById("playerGrid");
-    }
+    let grid = document.getElementById("playerGrid");;
 
     while(grid.hasChildNodes()){
         grid.removeChild(grid.lastChild);
@@ -30,20 +25,54 @@ function renderGrid(player){
                 point.textContent = "o";
             }  
 
-            point.addEventListener("click", () => {
-                receiveAttack(player, new Point(j, i));
-            })
-
             grid.appendChild(point);
         }
     }
+}
+
+function renderHiddenGrid(computer){
+    const gameBoard = computer.gameBoard;
+    const board = gameBoard.board;
+    const grid = document.getElementById("computerGrid");
+    while(grid.hasChildNodes()){
+        grid.removeChild(grid.lastChild);
+    }
+
+    for(let i = 0; i < board[0].length; i++){
+        for(let j = 0; j < board[0].length; j++){
+            const point = document.createElement("div");
+            point.setAttribute("class", "point " + i + " " + j);
+            point.addEventListener("click", () => {
+                receiveAttack(computer, new Point(i, j));
+                renderHiddenGrid(computer);
+            })
+            grid.appendChild(point);
+        }
+    }
+
+    const missed = gameBoard.missed;
+    const gridChildren = grid.querySelectorAll(".point");
+    for(let i = 0; i < missed.length; i++){
+        const currMiss = missed[i];
+        gridChildren[currMiss.x * 10 + currMiss.y].setAttribute("class", "miss");
+        gridChildren[currMiss.x * 10 + currMiss.y].textContent = "o";
+    }
+
+    const hitArray = gameBoard.hits;
+    for(let i = 0; i < hitArray.length; i++){
+        const currHit = hitArray[i];
+        gridChildren[currHit.x * 10 + currHit.y].setAttribute("class", "hit");
+    }
+
 }
 
 function receiveAttack(player, point){
     const gameBoard = player.gameBoard;
     const board = gameBoard.board;
     gameBoard.receiveAttack(point);
-    renderGrid(player);
+    if(gameBoard.allShipsSunk()){
+        console.log("GAME OVER");
+    }
 }
 
 const playerShips = [];
@@ -72,5 +101,5 @@ computerGrid.setAttribute("class", "gridContainer");
 gridContainer.appendChild(playerGrid);
 gridContainer.appendChild(computerGrid);
 
-renderGrid(player);
-renderGrid(computer);
+renderPlayerGrid(player);
+renderHiddenGrid(computer);

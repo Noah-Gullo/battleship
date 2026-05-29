@@ -90,11 +90,13 @@ export class Ship{
 
 export class GameBoard{
     #board
+    #hits
     #missed
     #ships
     constructor(ships){
         this.#board = [[],[],[],[],[],[],[],[],[],[]];
         this.createBoard();
+        this.#hits = [];
         this.#missed = [];
         this.#ships = ships;
         this.placeShips();
@@ -128,11 +130,10 @@ export class GameBoard{
         if(point.x < 0 || point.x > 9  || point.y < 0 || point.y > 9) throw new Errror("Point passed is not in grid");
         const place = this.getPoint(point);
         if(place instanceof Ship){
-            const ship = this.getPoint(point)
+            const ship = this.getPoint(point);
             ship.hit();
             this.#board[point.y][point.x] = "Hit"; 
-            this.allShipsSunk();
-            return;
+            this.#hits.push(point);
         }else if(place instanceof Point){
             this.#board[point.y][point.x] = "Miss";
             this.#missed.push(point);   
@@ -161,6 +162,10 @@ export class GameBoard{
 
     get board(){
         return this.#board;
+    }
+
+    get hits(){
+        return this.#hits;
     }
 
     get missed(){
