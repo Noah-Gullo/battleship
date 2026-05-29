@@ -41,9 +41,10 @@ function renderHiddenGrid(computer){
     for(let i = 0; i < board[0].length; i++){
         for(let j = 0; j < board[0].length; j++){
             const point = document.createElement("div");
-            point.setAttribute("class", "point " + i + " " + j);
+            point.setAttribute("class", "point");
             point.addEventListener("click", () => {
                 receiveAttack(computer, new Point(i, j));
+                computerAttack();
                 renderHiddenGrid(computer);
             })
             grid.appendChild(point);
@@ -51,7 +52,7 @@ function renderHiddenGrid(computer){
     }
 
     const missed = gameBoard.missed;
-    const gridChildren = grid.querySelectorAll(".point");
+    const gridChildren = grid.querySelectorAll("*");
     for(let i = 0; i < missed.length; i++){
         const currMiss = missed[i];
         gridChildren[currMiss.x * 10 + currMiss.y].setAttribute("class", "miss");
@@ -64,6 +65,17 @@ function renderHiddenGrid(computer){
         gridChildren[currHit.x * 10 + currHit.y].setAttribute("class", "hit");
     }
 
+}
+
+function computerAttack(){
+    const randomX = Math.floor(Math.random() * 10);
+    const randomY = Math.floor(Math.random() * 10);
+    const point = new Point(randomX, randomY);
+    if(!(player.gameBoard.getPoint(point) instanceof Point)){
+        computerAttack();
+    }
+    receiveAttack(player, point);
+    renderPlayerGrid(player);
 }
 
 function receiveAttack(player, point){
