@@ -4,6 +4,14 @@ import "./styles.css";
 let playerTurn = true;
 let activeGame = true;
 
+function populateComputerMoves(){
+    for(let i = 0; i < 10; i++){
+            for(let j = 0; j < 10; j++){
+                computerMoves.push(new Point(i, j));
+            }
+        }
+}
+
 function renderPlayerGrid(player){
     if(!activeGame){
         return;
@@ -80,13 +88,10 @@ export function renderHiddenGrid(computer){
 }
 
 function computerAttack(){
-    const randomX = Math.floor(Math.random() * 10);
-    const randomY = Math.floor(Math.random() * 10);
-    const point = new Point(randomX, randomY);
-    if(!(player.gameBoard.getPoint(point) instanceof Point)){
-        computerAttack();
-    }
-    receiveAttack(player, point);
+    const randomIndex = Math.floor(Math.random() * computerMoves.length);
+    const randomAttack = computerMoves[randomIndex];
+    computerMoves.splice(randomIndex, 1);
+    receiveAttack(player, randomAttack);
     playerTurn = true;
     renderPlayerGrid(player);
 }
@@ -104,7 +109,10 @@ function receiveAttack(player, point){
 
     if(shipHit && !playerTurn){
         computerAttack();
-    }else if(!shipHit){
+    }else if(shipHit && playerTurn){
+        playerTurn = true;
+    }
+    else if(!shipHit){
         playerTurn = !playerTurn;
     }
 
@@ -122,7 +130,7 @@ function gameOver(loser){
     if(loser.isComputer){
         winnerText.textContent = "Player has won!";
     }else{
-        winnerText.textContent = "Winner has won!";
+        winnerText.textContent = "Computer has won!";
     }
 
     content.appendChild(winnerText);
@@ -152,6 +160,8 @@ playerGrid.setAttribute("class", "gridContainer");
 computerGrid.setAttribute("class", "gridContainer");
 gridContainer.appendChild(playerGrid);
 gridContainer.appendChild(computerGrid);
+const computerMoves = [];
 
+populateComputerMoves();
 renderPlayerGrid(player);
 renderHiddenGrid(computer);
