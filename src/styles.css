@@ -30,6 +30,11 @@ h1{
   color: var(--title-color);
 }
 
+#content{
+  display: flex;
+  justify-content: center;
+}
+
 #gridContainer{
   display: flex;
   justify-content: center;
@@ -74,4 +79,8 @@ h1{
   display: flex;
   justify-content: center;
   align-content: center;
+}
+
+.winText{
+  font-size: 2em;
 }

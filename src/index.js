@@ -2,8 +2,13 @@ import { Point, Ship, GameBoard, Player } from "./classes.js";
 import "./styles.css";
 
 let playerTurn = true;
+let activeGame = true;
 
 function renderPlayerGrid(player){
+    if(!activeGame){
+        return;
+    }
+
     const gameBoard = player.gameBoard;
     const board = gameBoard.board;
     let grid = document.getElementById("playerGrid");;
@@ -33,6 +38,10 @@ function renderPlayerGrid(player){
 }
 
 export function renderHiddenGrid(computer){
+    if(!activeGame){
+        return;
+    }
+
     const gameBoard = computer.gameBoard;
     const board = gameBoard.board;
     const grid = document.getElementById("computerGrid");
@@ -89,7 +98,8 @@ function receiveAttack(player, point){
     let shipHit = gameBoard.receiveAttack(point);
     
     if(gameBoard.allShipsSunk()){
-        gameOver();
+        gameOver(player);
+        return;
     }
 
     if(shipHit && !playerTurn){
@@ -103,8 +113,20 @@ function receiveAttack(player, point){
     }
 }
 
-function gameOver(){
-    console.log("GAME OVER");
+function gameOver(loser){
+    const gridContainer = document.getElementById("gridContainer");
+    content.removeChild(gridContainer);
+
+    const winnerText = document.createElement("p");
+    winnerText.setAttribute("class", "winText");
+    if(loser.isComputer){
+        winnerText.textContent = "Player has won!";
+    }else{
+        winnerText.textContent = "Winner has won!";
+    }
+
+    content.appendChild(winnerText);
+    activeGame = false;
 }
 
 const playerShips = [];
@@ -114,9 +136,7 @@ playerShips[2] = new Ship(false, 3, new Point(2, 2));
 const player = new Player(false, new GameBoard(playerShips));
 
 const computerShips = [];
-computerShips[0] = new Ship(true, 4, new Point(3, 2));
-computerShips[1] = new Ship(false, 2, new Point(5, 1));
-computerShips[2] = new Ship(false, 3, new Point(6,7));
+computerShips[0] = new Ship(true, 2, new Point(0, 0));
 const computer = new Player(true, new GameBoard(computerShips));
 
 const content = document.getElementById("content");
