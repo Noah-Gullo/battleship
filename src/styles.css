@@ -15,6 +15,8 @@
   --background-color: rgb(171, 171, 255);
   --title-color: rgb(0, 0, 122);
   --point-color: rgb(52, 133, 255);
+  --point-hover-color: rgb(139, 185, 253);
+  --point-mouse-down-color: rgb(0, 65, 162);
   --miss-color: rgb(0, 43, 107);
   --ship-color: rgb(94, 94, 94);
   --hit-color: rgb(255, 0, 0);
@@ -48,6 +50,14 @@ h1{
 
 .point{
   background-color: var(--point-color);
+}
+
+#computerGrid .point:hover{
+  background-color: var(--point-hover-color);
+}
+
+#computerGrid .point:active{
+  background-color: var(--point-mouse-down-color);
 }
 
 .ship{
