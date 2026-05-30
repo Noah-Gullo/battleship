@@ -20,6 +20,13 @@
   --miss-color: rgb(0, 43, 107);
   --ship-color: rgb(94, 94, 94);
   --hit-color: rgb(255, 0, 0);
+
+  --replay-color: rgb(0, 190, 0);
+  --replay-hover-color:  rgb(0, 216, 0);
+  --replay-mouse-down-color: rgb(0, 96, 0);
+  --replace-color: rgb(86, 86, 86);
+  --replace-hover-color: rgb(100, 100, 100);
+  --replace-mouse-down-color: rgb(70, 70, 70);
 }
 
 h1{
@@ -82,6 +89,51 @@ h1{
   align-content: center;
 }
 
-.winText{
+#winElements{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#winText{
+  font-size: 5em;
+}
+
+#replayButton, 
+#replaceButton{
   font-size: 2em;
+  border: none;
+  border-radius: 0.25em;
+  margin: 0.25em;
+}
+
+#replayButton{
+  background-color: var(--replay-color);
+  padding: 0.25em;
+}
+
+#replayButton:hover{
+  background-color: var(--replay-hover-color);
+  padding: 0.3em;
+}
+
+#replayButton:active{
+  background-color: var(--replay-mouse-down-color);
+  padding: 0.2em;
+}
+
+#replaceButton{
+  background-color: var(--replace-color);
+  padding: 0.15em;
+}
+
+#replaceButton:hover{
+  background-color: var(--replace-hover-color);
+  padding: 0.2em;
+}
+
+#replaceButton:active{
+  background-color: var(--replace-mouse-down-color);
+  padding: 0.10em;
 }

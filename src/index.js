@@ -126,15 +126,28 @@ function gameOver(loser){
     const gridContainer = document.getElementById("gridContainer");
     content.removeChild(gridContainer);
 
+    const winElements = document.createElement("div");
+    winElements.setAttribute("id", "winElements");
     const winnerText = document.createElement("p");
-    winnerText.setAttribute("class", "winText");
+    winnerText.setAttribute("id", "winText");
     if(loser.isComputer){
         winnerText.textContent = "Player has won!";
     }else{
         winnerText.textContent = "Computer has won!";
     }
 
-    content.appendChild(winnerText);
+    const replayButton = document.createElement("button");
+    replayButton.setAttribute("id", "replayButton");
+    replayButton.textContent = "Replay";
+
+    const replaceButton = document.createElement("button");
+    replaceButton.setAttribute("id", "replaceButton");
+    replaceButton.textContent = "Replace";
+
+    winElements.appendChild(winnerText);
+    winElements.appendChild(replayButton);
+    winElements.appendChild(replaceButton);
+    content.appendChild(winElements);
     activeGame = false;
 }
 
