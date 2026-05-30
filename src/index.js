@@ -75,8 +75,9 @@ export function renderHiddenGrid(computer){
     const gridChildren = grid.querySelectorAll("*");
     for(let i = 0; i < missed.length; i++){
         const currMiss = missed[i];
-        gridChildren[currMiss.x * 10 + currMiss.y].setAttribute("class", "miss");
-        gridChildren[currMiss.x * 10 + currMiss.y].textContent = "o";
+        const missDiv = gridChildren[currMiss.x * 10 + currMiss.y]
+        missDiv.setAttribute("class", "miss");
+        missDiv.textContent = "o";
     }
 
     const hitArray = gameBoard.hits;

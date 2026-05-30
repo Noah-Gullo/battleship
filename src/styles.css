@@ -76,6 +76,7 @@ h1{
 .miss{
   background-color: var(--miss-color);
   font-size: 1.8rem;
+  user-select: none;
   display: flex;
   justify-content: center;
   align-content: center;
