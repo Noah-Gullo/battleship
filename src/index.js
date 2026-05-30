@@ -1,6 +1,8 @@
 import { Point, Ship, GameBoard, Player } from "./classes.js";
 import "./styles.css";
 
+let playerTurn = true;
+
 function renderPlayerGrid(player){
     const gameBoard = player.gameBoard;
     const board = gameBoard.board;
@@ -30,7 +32,7 @@ function renderPlayerGrid(player){
     }
 }
 
-function renderHiddenGrid(computer){
+export function renderHiddenGrid(computer){
     const gameBoard = computer.gameBoard;
     const board = gameBoard.board;
     const grid = document.getElementById("computerGrid");
@@ -42,10 +44,11 @@ function renderHiddenGrid(computer){
         for(let j = 0; j < board[0].length; j++){
             const point = document.createElement("div");
             point.setAttribute("class", "point");
-            point.addEventListener("click", () => {
-                receiveAttack(computer, new Point(i, j));
-                computerAttack();
-                renderHiddenGrid(computer);
+            point.addEventListener("click", async () => {
+                if(playerTurn){
+                    receiveAttack(computer, new Point(i, j));
+                    renderHiddenGrid(computer);
+                }
             })
             grid.appendChild(point);
         }
@@ -75,16 +78,33 @@ function computerAttack(){
         computerAttack();
     }
     receiveAttack(player, point);
+    playerTurn = true;
     renderPlayerGrid(player);
 }
 
 function receiveAttack(player, point){
     const gameBoard = player.gameBoard;
     const board = gameBoard.board;
-    gameBoard.receiveAttack(point);
+
+    let shipHit = gameBoard.receiveAttack(point);
+    
     if(gameBoard.allShipsSunk()){
-        console.log("GAME OVER");
+        gameOver();
     }
+
+    if(shipHit && !playerTurn){
+        computerAttack();
+    }else if(!shipHit){
+        playerTurn = !playerTurn;
+    }
+
+    if(!playerTurn){
+        computerAttack();
+    }
+}
+
+function gameOver(){
+    console.log("GAME OVER");
 }
 
 const playerShips = [];
