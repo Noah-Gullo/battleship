@@ -61,8 +61,8 @@ export function renderHiddenGrid(computer){
         for(let j = 0; j < board[0].length; j++){
             const point = document.createElement("div");
             point.setAttribute("class", "point");
-            point.addEventListener("click", async () => {
-                if(playerTurn){
+            point.addEventListener("click", () => {
+                if(playerTurn && point.getAttribute("class", "point") === "point"){
                     receiveAttack(computer, new Point(i, j));
                     renderHiddenGrid(computer);
                 }
