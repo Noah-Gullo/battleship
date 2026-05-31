@@ -67,7 +67,7 @@ export class Ship{
             end = new Point(this.#location.x, this.#location.y + this.#length - 1);
         }
 
-        if(!this.#location.onGrid()) throw new Error("Ship start must be located on 10x10 grid starting at (0,0).")
+        if(!this.#location.onGrid()) throw new Error("Ship start must be located on 10x10 grid starting at (0,0).");
         if(!end.onGrid()) throw new Error("Ship end must be located on 10x10 grid starting at (0,0)."); 
     }
 

@@ -13,7 +13,7 @@
 
 :root{
   --background-color: rgb(171, 171, 255);
-  --title-color: rgb(0, 0, 122);
+  --instructions-color: rgb(57, 57, 57);
   --point-color: rgb(52, 133, 255);
   --point-hover-color: rgb(139, 185, 253);
   --point-mouse-down-color: rgb(0, 65, 162);
@@ -34,12 +34,12 @@ h1{
   margin: 0.25em;
   display: flex;
   justify-content: center;
-  color: var(--title-color);
 }
 
 #content{
   display: flex;
   justify-content: center;
+  gap: 1rem;
 }
 
 #gridContainer{
@@ -49,7 +49,8 @@ h1{
 }
 
 #playerGrid,
-#computerGrid{
+#computerGrid,
+#placeGrid{
   display: grid;
   width: 25rem;
   height: 25rem;
@@ -101,43 +102,62 @@ h1{
 }
 
 #replayButton, 
-#replaceButton{
+#replaceButton,
+#startButton,
+#randomizeButton{
   font-size: 2em;
   border: none;
   border-radius: 0.25em;
   margin: 0.25em;
 }
 
-#replayButton{
+#startButton,
+#randomizeButton{
+  font-size: 1em;
+}
+
+#replayButton,
+#startButton{
   background-color: var(--replay-color);
   padding: 0.25em;
 }
 
-#replayButton:hover{
+#replayButton:hover,
+#startButton:hover{
   background-color: var(--replay-hover-color);
   padding: 0.3em;
 }
 
-#replayButton:active{
+#replayButton:active,
+#startButton:active{
   background-color: var(--replay-mouse-down-color);
   padding: 0.2em;
 }
 
-#replaceButton{
+#replaceButton,
+#randomizeButton{
   background-color: var(--replace-color);
   padding: 0.15em;
 }
 
-#replaceButton:hover{
+#replaceButton:hover,
+#randomizeButton:hover{
   background-color: var(--replace-hover-color);
   padding: 0.2em;
 }
 
-#replaceButton:active{
+#replaceButton:active,
+#randomizeButton:active{
   background-color: var(--replace-mouse-down-color);
   padding: 0.10em;
 }
 
+.instruction{
+  font-size: 1em;
+  color: var(--instructions-color);
+}
+
 #instructionsTitle{
-  font-size: 2em;
+  font-size: 2.5em;
+  color: var(--instructions-color);
 }
