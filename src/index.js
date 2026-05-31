@@ -5,7 +5,35 @@ let playerTurn = true;
 let activeGame = true;
 let player = null;
 let computer = null;
+const playerShips = [];
 const computerMoves = [];
+
+function renderInstructions(){
+    const instructions = [
+        "1. Place your ships randomly or drag and drop.",
+        "2. Press start game once you have placed your ships", 
+        "3. Click on the left/computer's grid to shoot.",
+        "4. First to shoot all the ships wins!",
+        "BLUE is an unknown space, RED is a hit, DARK BLUE is a miss",
+    ];
+    const content = document.getElementById("content");
+    const instructionsDiv = document.createElement("div");
+    instructionsDiv.setAttribute("id", "instructionsContainer");
+    const subtitle = document.createElement("p");
+    subtitle.textContent = "How to Play:";
+    subtitle.setAttribute("id", "instructionsTitle");
+    instructionsDiv.appendChild(subtitle);
+
+    for(let i = 0; i < instructions.length; i++){
+        const text = document.createElement("p");
+        text.setAttribute("class", "instruction");
+        text.textContent = instructions[i];
+        instructionsDiv.appendChild(text);
+    }
+
+
+    content.appendChild(instructionsDiv);
+}
 
 function populateComputerMoves(){
     for(let i = 0; i < 10; i++){
@@ -48,7 +76,7 @@ function renderPlayerGrid(player){
     }
 }
 
-export function renderHiddenGrid(computer){
+function renderHiddenGrid(computer){
     if(!activeGame){
         return;
     }
@@ -196,9 +224,16 @@ function startGame(playerShips){
     renderHiddenGrid(computer);
 }
 
-const playerShips = [];
+function setupGame(){
+    const content = document.getElementById("content");
+    while(content.hasChildNodes()){
+        content.removeChild(content.lastChild);
+    }
+    renderInstructions();
+}
+
 playerShips[0] = new Ship(false, 3, new Point(3, 7));
 playerShips[1] = new Ship(true, 2, new Point(8, 5));
 playerShips[2] = new Ship(false, 3, new Point(2, 2));
 
-startGame(playerShips);
+setupGame();

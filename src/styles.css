@@ -137,3 +137,7 @@ h1{
   background-color: var(--replace-mouse-down-color);
   padding: 0.10em;
 }
+
+#instructionsTitle{
+  font-size: 2em;
+}
