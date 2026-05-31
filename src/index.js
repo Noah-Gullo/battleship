@@ -3,13 +3,16 @@ import "./styles.css";
 
 let playerTurn = true;
 let activeGame = true;
+let player = null;
+let computer = null;
+const computerMoves = [];
 
 function populateComputerMoves(){
     for(let i = 0; i < 10; i++){
-            for(let j = 0; j < 10; j++){
-                computerMoves.push(new Point(i, j));
-            }
+        for(let j = 0; j < 10; j++){
+            computerMoves.push(new Point(i, j));
         }
+    }
 }
 
 function renderPlayerGrid(player){
@@ -136,9 +139,17 @@ function gameOver(loser){
         winnerText.textContent = "Computer has won!";
     }
 
+    player.gameBoard.hits = [];
+    player.gameBoard.missed = [];
+    computer.gameBoard.hits = [];
+    computer.gameBoard.hits = [];
+
     const replayButton = document.createElement("button");
     replayButton.setAttribute("id", "replayButton");
     replayButton.textContent = "Replay";
+    replayButton.addEventListener("click", () => {
+        startGame(playerShips);
+    })
 
     const replaceButton = document.createElement("button");
     replaceButton.setAttribute("id", "replaceButton");
@@ -151,31 +162,43 @@ function gameOver(loser){
     activeGame = false;
 }
 
+function startGame(playerShips){
+    player = new Player(false, new GameBoard(playerShips));
+
+    const computerShips = [];
+    computerShips[0] = new Ship(true, 2, new Point(0, 0));
+    computer = new Player(true, new GameBoard(computerShips));
+
+    const content = document.getElementById("content");
+    
+    while(content.hasChildNodes()){
+        content.removeChild(content.lastChild);
+    }
+
+    const gridContainer = document.createElement("div");
+    gridContainer.setAttribute("id", "gridContainer");
+    content.appendChild(gridContainer);
+
+    const computerGrid = document.createElement("div");
+    computerGrid.setAttribute("id", "computerGrid");
+    computerGrid.setAttribute("class", "gridContainer");
+
+    const playerGrid = document.createElement("div");
+    playerGrid.setAttribute("id", "playerGrid");
+    playerGrid.setAttribute("class", "gridContainer");
+
+    gridContainer.appendChild(playerGrid);
+    gridContainer.appendChild(computerGrid);
+
+    activeGame = true;
+    populateComputerMoves();
+    renderPlayerGrid(player);
+    renderHiddenGrid(computer);
+}
+
 const playerShips = [];
 playerShips[0] = new Ship(false, 3, new Point(3, 7));
 playerShips[1] = new Ship(true, 2, new Point(8, 5));
 playerShips[2] = new Ship(false, 3, new Point(2, 2));
-const player = new Player(false, new GameBoard(playerShips));
 
-const computerShips = [];
-computerShips[0] = new Ship(true, 2, new Point(0, 0));
-const computer = new Player(true, new GameBoard(computerShips));
-
-const content = document.getElementById("content");
-const gridContainer = document.createElement("div");
-gridContainer.setAttribute("id", "gridContainer");
-content.appendChild(gridContainer);
-
-const computerGrid = document.createElement("div");
-computerGrid.setAttribute("id", "computerGrid");
-const playerGrid = document.createElement("div");
-playerGrid.setAttribute("id", "playerGrid");
-playerGrid.setAttribute("class", "gridContainer");
-computerGrid.setAttribute("class", "gridContainer");
-gridContainer.appendChild(playerGrid);
-gridContainer.appendChild(computerGrid);
-const computerMoves = [];
-
-populateComputerMoves();
-renderPlayerGrid(player);
-renderHiddenGrid(computer);
+startGame(playerShips);
